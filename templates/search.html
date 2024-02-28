@@ -1,0 +1,35 @@
+{% extends "base.html" %} {% block title %}Search for Friends{% endblock %} {%
+block content %}
+<div class="row">
+  <div class="col-md-6 offset-md-3">
+    <h2 class="mt-4 mb-4">Search for Friends</h2>
+    <form method="POST" action="{{ url_for('search') }}">
+      <div class="form-group">
+        <input
+          type="text"
+          class="form-control"
+          id="query"
+          name="query"
+          placeholder="Enter username"
+          required
+        />
+      </div>
+      <button type="submit" class="btn btn-primary">Search</button>
+    </form>
+  </div>
+</div>
+{% if users %}
+<div class="row mt-4">
+  <div class="col-md-6 offset-md-3">
+    <h3>Search Results:</h3>
+    <ul class="list-group">
+      {% for user in users %}
+      <li class="list-group-item">
+        <a href="{{ url_for('home', user_id=user[0]) }}">{{ user[1] }}</a> - {{
+        user[2] }}
+      </li>
+      {% endfor %}
+    </ul>
+  </div>
+</div>
+{% endif %} {% endblock %}

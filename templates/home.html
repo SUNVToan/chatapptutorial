@@ -1,0 +1,71 @@
+{% extends "base.html" %} {% block title %}Chat Interface{% endblock %} {% block
+content %}
+<div class="row">
+  <div class="col-md-8">
+    <h2 class="mt-4 mb-4">Chat Room</h2>
+    <div
+      id="chat-box"
+      class="border rounded p-3 mb-4"
+      style="height: 300px; overflow-y: scroll"
+    >
+      <!-- Tin nhắn sẽ được hiển thị ở đây -->
+    </div>
+    <div class="input-group mb-3">
+      <input
+        type="text"
+        class="form-control"
+        id="message-input"
+        placeholder="Type your message here..."
+      />
+      <div class="input-group-append">
+        <button class="btn btn-primary" type="button" id="send-btn">
+          Send
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <h3 class="mt-4 mb-4">conversation</h3>
+    <ul class="list-group">
+      <!-- Danh sách thành viên tham gia cuộc trò chuyện -->
+      {% for conversation in conversations %}
+      <a
+        href="{{ url_for('conversation_detail', conversation_id=conversation[0]) }}"
+        class="list-group-item list-group-item-action"
+      >
+        <h5 class="mb-1">{{ conversation[1] }}</h5>
+        <p class="mb-1">Loại: {{ conversation[2] }}</p>
+      </a>
+      {% endfor %}
+    </ul>
+  </div>
+</div>
+{% endblock %} {% block scripts %}
+<script>
+  // Gửi tin nhắn khi nhấn Enter
+  document
+    .getElementById("message-input")
+    .addEventListener("keypress", function (event) {
+      if (event.keyCode === 13) {
+        event.preventDefault()
+        document.getElementById("send-btn").click()
+      }
+    })
+
+  // Xử lý sự kiện gửi tin nhắn
+  document.getElementById("send-btn").addEventListener("click", function () {
+    var messageInput = document.getElementById("message-input")
+    var message = messageInput.value.trim()
+    if (message !== "") {
+      // Gửi tin nhắn tới server và xử lý
+      messageInput.value = ""
+      // Thêm tin nhắn mới vào chat-box
+      var chatBox = document.getElementById("chat-box")
+      var newMessage = document.createElement("p")
+      newMessage.textContent = message
+      chatBox.appendChild(newMessage)
+      chatBox.scrollTop = chatBox.scrollHeight
+    }
+  })
+</script>
+{% endblock %}
